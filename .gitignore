@@ -162,3 +162,5 @@ cython_debug/
 # Configs
 configs/*
 !/configs/configs.yaml
+
+experiments/
