@@ -6,8 +6,6 @@ import shutil
 from typing import Dict
 from pathlib import Path
 
-
-
 """
 Load Magi config file at ~/.magi/config.yaml
 

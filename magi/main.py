@@ -1,7 +1,8 @@
 import openai
 import chromadb
 import os
-from config import load_config, initialize_config
+from config import load_config
+from memory import DialogueBufferMemory
 from pathlib import Path
 
 COMPANION_PROMPT = """
@@ -34,6 +35,8 @@ def main():
     #index = chroma_client.create_collection(name="test", embedding_function=openai_ef)
 
     conversation = []
+    save_path = Path.home() / ".magi/dialogues"
+    dialogue_mem = DialogueBufferMemory(save_path)
 
     while True:
         query = input("> ")

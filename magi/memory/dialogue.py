@@ -1,8 +1,9 @@
-import json,sys
+import json
 from typing import List
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
+from uuid import uuid4
 
 from magi.common import Message
 
@@ -12,6 +13,7 @@ class DialogueSession():
     def __init__(self):
         self.messages = []
         self.start_time = datetime.now().isoformat()
+        self.uuid = uuid4()
 
     def __iter__(self):
         return iter(self.messages)
@@ -28,13 +30,15 @@ class DialogueSession():
     def to_json(self):
         return json.dumps({
             "messages": [asdict(message) for message in self.messages],
-            "start_time": self.start_time
+            "start_time": self.start_time,
+            "uuid": self.uuid
         })
     
     def _load_json(self, json_str):
         json_dict = json.loads(json_str)
         self.messages = [Message(**message) for message in json_dict["messages"]]
         self.start_time = json_dict["start_time"]
+        self.uuid = json_dict["uuid"]
 
     @staticmethod
     def from_json(json_str):
@@ -46,15 +50,19 @@ class DialogueSession():
 class DialogueBufferMemory():
     """A memory module that provides dialogue history as context for subsequent LLM operations."""
 
-    def __init__(self, save_path: Path, max_context_size: int):
+    def __init__(self, path: Path, max_context_size: int = 20):
+        self.path = path
         self.max_context_size = max_context_size
         self.session = None
+        self.new_session()
         
     def new_session(self):
-        raise NotImplementedError()
+        self.session = DialogueSession()
 
     def end_session(self):
-        raise NotImplementedError()
+        filename =self.path / f"{self.session.start_time}.{self.session.uuid}.json"
+        with open(filename, "w") as f:
+            f.write(self.session.to_json())
     
     def get_context(self):
-        raise NotImplementedError()
+        return self.session.read_from_tail(self.max_context_size)
