@@ -3,6 +3,7 @@ import chromadb
 import os
 from config import load_config
 from memory import DialogueBufferMemory
+from common import MessageRole, Message
 from pathlib import Path
 
 COMPANION_PROMPT = """
@@ -38,22 +39,33 @@ def main():
     save_path = Path.home() / ".magi/dialogues"
     dialogue_mem = DialogueBufferMemory(save_path)
 
+    dialogue_mem.new_session()
+
     while True:
         query = input("> ")
+        if query == "exit":
+            break
+        
+        dialogue_mem.append(Message(MessageRole.USER, query))
+        messages = [Message(MessageRole.SYSTEM, COMPANION_PROMPT)] + dialogue_mem.get_context()
 
-        messages = [{"role":"system", "content": COMPANION_PROMPT}]
-        for (u, a) in conversation:
-            messages.append({"role":"user", "content": u})
-            messages.append({"role":"assistant", "content": a})
-        messages.append({"role":"user", "content": query})
+        print(messages)
 
         reply = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-0613",
-            messages = messages,
+            messages = to_openai_format(messages),
         )
 
         reply = reply.choices[0].message.content.strip()
+
         print(reply)
+
+        dialogue_mem.append(Message(MessageRole.ASSISTANT, reply))
+
+    dialogue_mem.end_session()
+
+def to_openai_format(messages):
+    return [{"role": message.role.value, "content": message.content} for message in messages]
 
 
 def initialize_workspace():

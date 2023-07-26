@@ -13,7 +13,7 @@ class DialogueSession():
     def __init__(self):
         self.messages = []
         self.start_time = datetime.now().isoformat()
-        self.uuid = uuid4()
+        self.uuid = str(uuid4())
 
     def __iter__(self):
         return iter(self.messages)
@@ -66,3 +66,6 @@ class DialogueBufferMemory():
     
     def get_context(self):
         return self.session.read_from_tail(self.max_context_size)
+    
+    def append(self, message: Message):
+        self.session.append(message)
