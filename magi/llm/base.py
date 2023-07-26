@@ -1,6 +1,6 @@
 from abc import ABC
 from typing import List
-from common import Message
+from magi.common import Message
 
 class BaseLlm(ABC):
     

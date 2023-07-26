@@ -1,6 +1,6 @@
 from base import BaseLlm
 from typing import List, Dict
-from common import Message
+from magi.common import Message
 
 class OpenAILlm(BaseLlm):
     

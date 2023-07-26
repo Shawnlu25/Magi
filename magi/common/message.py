@@ -21,10 +21,10 @@ class Message():
     content: str
     timestamp : str = field(default_factory=lambda : datetime.now().isoformat())
 
-    def dump_json(self):
+    def to_json(self):
         return json.dumps(asdict(self))
     
     @classmethod
-    def load_json(cls, json_str):
+    def from_json(cls, json_str):
         json_dict = json.loads(json_str)
         return cls(**json_dict)

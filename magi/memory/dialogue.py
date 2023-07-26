@@ -1,10 +1,10 @@
-import json
+import json,sys
 from typing import List
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 
-from common import Message
+from magi.common import Message
 
 class DialogueSession():
     """A dialogue session, consisting of a list of messages."""
@@ -25,13 +25,13 @@ class DialogueSession():
     def read_from_tail(self, n: int = 1) -> List[Message]:
         return self.messages[-n:]
 
-    def dump_json(self):
+    def to_json(self):
         return json.dumps({
             "messages": [asdict(message) for message in self.messages],
             "start_time": self.start_time
         })
     
-    def load_json(self, json_str):
+    def _load_json(self, json_str):
         json_dict = json.loads(json_str)
         self.messages = [Message(**message) for message in json_dict["messages"]]
         self.start_time = json_dict["start_time"]
@@ -39,7 +39,7 @@ class DialogueSession():
     @staticmethod
     def from_json(json_str):
         dialogue_session = DialogueSession()
-        dialogue_session.load_json(json_str)
+        dialogue_session._load_json(json_str)
         return dialogue_session
     
 
@@ -58,4 +58,3 @@ class DialogueBufferMemory():
     
     def get_context(self):
         raise NotImplementedError()
-    
