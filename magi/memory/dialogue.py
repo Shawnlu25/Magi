@@ -1,6 +1,6 @@
 import json
 from typing import List
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 

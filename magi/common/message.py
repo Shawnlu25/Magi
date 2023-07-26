@@ -1,11 +1,23 @@
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
+from enum import Enum
+from typing import NewType
 import json
+
+class MessageRole(str, Enum):
+    SYSTEM = "system"
+    USER = "user"
+    ASSISTANT = "assistant"
+    FUNCTION = "function"
 
 @dataclass
 class Message():
-    """A message in a dialogue session."""
-    type: str
+    """
+    A message is simply a role and a string content. 
+    e.g. {"role": "user", "content": "Hello world!"}
+    Timestamp in ISO format is automatically added at the time of creation.
+    """
+    role: NewType("MessageRole", MessageRole)
     content: str
     timestamp : str = field(default_factory=lambda : datetime.now().isoformat())
 
