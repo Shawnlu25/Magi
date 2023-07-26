@@ -1,0 +1,8 @@
+
+# OpenAI API
+openai_api_key: ""
+
+memory:
+  dialogue_buffer:
+    max_context_size: 1024
+
