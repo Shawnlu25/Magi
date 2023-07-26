@@ -1,1 +1,1 @@
-from .message import Message, MessageRole
+from .message import *
