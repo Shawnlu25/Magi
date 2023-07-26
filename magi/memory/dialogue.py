@@ -32,7 +32,7 @@ class DialogueSession():
         return iter(self.messages)
 
     def __len__(self) -> int:
-        len(self.messages)
+        return len(self.messages)
 
     def append(self, message: Message):
         self.messages.append(message)
