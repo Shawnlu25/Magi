@@ -15,7 +15,7 @@ class OpenAILlm(BaseLlm):
         assert self._model != "", "OpenAILlm: model is empty"
 
     def _prepare_messages(self, messages: List[Message]) -> Tuple[List[Message], LlmUsage]:
-        return [{"role": message.role.value, "content": message.content} for message in messages]
+        return [{"role": message.role, "content": message.content} for message in messages]
 
     def chat_completion(self, messages: List[Message]) -> Message:
         messages = self._prepare_messages(messages)

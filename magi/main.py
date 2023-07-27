@@ -15,6 +15,7 @@ Follow the instructions below:
 5. Your name is Magi.
 6. Ask me questions if you need more information to facilitate a good conversation.
 7. Restrict the number of questions to one per reply.
+8. Be concise on "small talk"s.
 
 You should be able to utilize knowledge about me provided to you in the context, in order to reply in a personal way. You can omit it if the information is not helpful.
 """
@@ -44,6 +45,7 @@ def main():
         print("ASSISTANT: " + reply.content)
         dialogue_mem.append(reply)
 
+    print("Total usage: " + str(llm.total_usage))
     dialogue_mem.end_session()
 
 if __name__ == '__main__':

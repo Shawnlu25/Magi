@@ -1,1 +1,1 @@
-from .dialogue import DialogueBufferMemory
+from .dialogue import DialogueBufferMemory, DialogueSession
