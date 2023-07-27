@@ -39,7 +39,8 @@ def main():
         dialogue_mem.append(Message(MessageRole.USER, query))
         messages = [Message(MessageRole.SYSTEM, COMPANION_PROMPT)] + dialogue_mem.get_context()
 
-        reply = llm.chat_completion(messages)
+        reply, usage = llm.chat_completion(messages)
+        print("\033[2m"+str(usage)+"\033[0m")
         print("ASSISTANT: " + reply.content)
         dialogue_mem.append(reply)
 

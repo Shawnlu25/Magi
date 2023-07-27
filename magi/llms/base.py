@@ -1,10 +1,12 @@
 from abc import ABC
 from typing import List
 from magi.common import Message
+from dataclasses import dataclass
+from datetime import datetime, timedelta
 
 class BaseLlm(ABC):
     def __init__(self):
-        pass
+        self.total_usage = LlmUsage(completion_tokens=0, prompt_tokens=0, response_time=timedelta(0))
     
     def chat_completion(self, messages : List[Message]) -> Message:
         raise NotImplementedError
@@ -12,3 +14,19 @@ class BaseLlm(ABC):
     def completion(self, prompt: str):
         raise NotImplementedError
 
+@dataclass
+class LlmUsage:
+    completion_tokens: int
+    prompt_tokens: int
+    response_time: timedelta
+
+    @property
+    def total_tokens(self):
+        return self.completion_tokens + self.prompt_tokens
+
+    def __add__(self, other):
+        return LlmUsage(
+            completion_tokens=self.completion_tokens + other.completion_tokens,
+            prompt_tokens=self.prompt_tokens + other.prompt_tokens,
+            response_time=self.response_time + other.response_time
+        )
