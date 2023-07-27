@@ -5,6 +5,7 @@ import pkg_resources
 import shutil
 from typing import Dict
 from pathlib import Path
+from .paths import CONFIG_PATH
 
 """
 Load Magi config file at ~/.magi/config.yaml
@@ -12,7 +13,7 @@ Load Magi config file at ~/.magi/config.yaml
 config_path: Path to config file, including the filename, e.g. ~/.magi/config.yaml
 """
 
-def load_config(config_path: Path) -> Dict:
+def load_config(config_path: Path = CONFIG_PATH) -> Dict:
     if not os.path.exists(config_path):
         logging.info(f'Config file not found at {config_path}, initialize new config file at {config_path}')
         initialize_config(config_path)
@@ -29,7 +30,7 @@ Initialize config file at stated location
 config_path: Path to config file, including the filename, e.g. ~/.magi/config.yaml
 """
 
-def initialize_config(config_path: Path):
+def initialize_config(config_path: Path = CONFIG_PATH):
     if not os.path.exists(os.path.dirname(config_path)):
         try:
             os.makedirs(os.path.dirname(config_path))
