@@ -1,7 +1,7 @@
 from config import *
 from memory import DialogueBufferMemory
 from common import MessageRole, Message
-from llms import OpenAILlm
+from llms import OpenAILlm, LlamaLlm
 from pathlib import Path
 
 COMPANION_PROMPT = """
