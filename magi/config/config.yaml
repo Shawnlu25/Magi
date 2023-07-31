@@ -1,11 +1,12 @@
-
-version: "1.0"
+version: 0.1.3
 
 # OpenAI API
 openai_api_key: ""
 openai_default_model: "gpt-3.5-turbo-0613"
 
+llama_cpp_server_url: "http://localhost:8000" 
+
 memory:
   dialogue_buffer:
-    max_context_size: 1024
+    max_context_size: 4096
 
