@@ -22,7 +22,6 @@ def load_config(config_path: Path = CONFIG_PATH) -> Dict:
         config = yaml.safe_load(f)
         if config is None:
             config = {}
-    _check_and_update_config(config)
     return config
 
 
@@ -46,7 +45,7 @@ def _initialize_config(config_path: Path = CONFIG_PATH):
     except Exception as e:
         logging.error(f'Failed to initialize config file: {e}')
         raise e
-    
+
 """
 Merge config file with new config
 """

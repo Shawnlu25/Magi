@@ -1,7 +1,7 @@
-from config import *
-from memory import DialogueBufferMemory
-from common import MessageRole, Message
-from llms import OpenAILlm, LlamaLlm
+from .config import *
+from .memory import DialogueBufferMemory
+from .common import MessageRole, Message
+from .llms import get_llm
 from pathlib import Path
 
 COMPANION_PROMPT = """
@@ -24,9 +24,14 @@ def main():
     # load config and get openai api key
     initialize_workspace_paths()
     config = load_config()
+    llms_config = config["llms"]
+    agent_config = config["agents"]["dialogue_agent"]
 
-    # Load LLM
-    llm = OpenAILlm(config.get("openai_api_key", ""), config.get("openai_default_model", ""))
+    # Load agent llm
+    llm_config = llms_config.get(agent_config["llm"], None)
+    if llm_config is None:
+        raise ValueError(f"Unknown llm: {agent_config['llm']}")
+    llm = get_llm(llm_config["type"], **llm_config["params"])
 
     # Start new session
     dialogue_mem = DialogueBufferMemory(DIALOGUE_SAVE_PATH)
