@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 class BaseLlm(ABC):
-    def __init__(self):
+    def __init__(self, max_tokens=4096):
+        self.max_tokens = max_tokens
         self.total_usage = LlmUsage(completion_tokens=0, prompt_tokens=0, response_time=timedelta(0))
     
     def chat_completion(self, messages : List[Message]) -> Message:

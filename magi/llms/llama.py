@@ -10,13 +10,13 @@ from pathlib import Path
 
 class LlamaLlm(BaseLlm):
     
-    def __init__(self, llama_cpp_server_url: str, api_version: str = "v1", max_tokens: int = 2048) -> None:
+    def __init__(self, llama_cpp_server_url: str, api_version: str = "v1", **kwargs) -> None:
         # TODO: Validate base_url
         assert llama_cpp_server_url.startswith("http://"), "LlamaLlm: base_url must be a valid http url (e.g. http://localhost:8000)"
         self.base_url = llama_cpp_server_url
         self.api_version = api_version
-        self.max_tokens = max_tokens
-        super().__init__()
+
+        super().__init__(**kwargs)
         
 
     def _prepare_messages(self, messages: List[Message]) -> Tuple[List[Message], LlmUsage]:

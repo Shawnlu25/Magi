@@ -1,7 +1,7 @@
-from .config import *
-from .memory import DialogueBufferMemory
-from .common import MessageRole, Message
-from .llms import get_llm
+from config import *
+from memory import DialogueBufferMemory
+from common import MessageRole, Message
+from llms import get_llm
 from pathlib import Path
 
 COMPANION_PROMPT = """
@@ -18,6 +18,24 @@ Follow the instructions below:
 8. Be concise on "small talk"s.
 
 You should be able to utilize knowledge about me provided to you in the context, in order to reply in a personal way. You can omit it if the information is not helpful.
+"""
+
+SUMMERIZATION_PROMPT = """
+Read the following dialogue between the user and assistant:
+{dialogue}
+Now answer the following questions: 
+1. What information do you find out about the user?
+2. What was the conversation about? Summarize in one sentence.
+
+Reply in a format such as the following. Fill in content only between <>s.:
+[facts]
+* <user fact 1>
+* <user fact 2>
+* <user fact>
+...
+* <user fact>
+[summary]
+<summary goes here>
 """
 
 def main():
@@ -51,6 +69,11 @@ def main():
         dialogue_mem.append(reply)
 
     print("Total usage: " + str(llm.total_usage))
+
+    prompt = SUMMERIZATION_PROMPT.format(dialogue = "\n".join([str(m) for m in dialogue_mem.get_context()]))
+    reply, usage = llm.chat_completion([Message(MessageRole.SYSTEM, prompt)])
+    print("SUMMARY")
+    print(reply)
     dialogue_mem.end_session()
 
 if __name__ == '__main__':

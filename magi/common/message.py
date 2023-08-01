@@ -21,6 +21,9 @@ class Message():
     content: str
     timestamp : str = field(default_factory=lambda : datetime.now().isoformat())
 
+    def __str__(self) -> str:
+        return f"{str(self.role)}: {self.content}"
+
     def to_json(self):
         return json.dumps(asdict(self))
     

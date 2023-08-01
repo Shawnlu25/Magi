@@ -7,12 +7,12 @@ from datetime import datetime
 
 class OpenAILlm(BaseLlm):
     
-    def __init__(self, openai_api_key: str, model: str = "gpt-3.5-turbo-0613") -> None:
-        super().__init__()
+    def __init__(self, openai_api_key: str, model: str = "gpt-3.5-turbo-0613", **kwargs) -> None:
         self._openai_api_key = openai_api_key
         self._model = model
         assert self._openai_api_key != "", "OpenAILlm: openai_api_key is empty"
         assert self._model != "", "OpenAILlm: model is empty"
+        super().__init__(**kwargs)
 
     def _prepare_messages(self, messages: List[Message]) -> Tuple[List[Message], LlmUsage]:
         return [{"role": message.role, "content": message.content} for message in messages]
@@ -41,4 +41,16 @@ class OpenAILlm(BaseLlm):
 
     
     def completion(self, prompt: str):
-        raise NotImplementedError
+
+        start_time = datetime.now()
+        result = openai.Completion.create(
+            api_key = self._openai_api_key,
+            model=self._model,
+            prompt = prompt,
+        )
+        end_time = datetime.now()
+
+        usage = LlmUsage(result.usage.completion_tokens, result.usage.prompt_tokens, end_time - start_time)
+        self.total_usage += usage
+
+        return result.choices[0].text

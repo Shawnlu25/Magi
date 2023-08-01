@@ -24,7 +24,7 @@ class DialogueSession():
     def append(self, message: Message):
         self.messages.append(message)
 
-    def read_from_tail(self, n: int = 1) -> List[Message]:
+    def read_from_tail(self, n: int = 0) -> List[Message]:
         return self.messages[-n:]
 
     def to_json(self):
@@ -50,7 +50,7 @@ class DialogueSession():
 class DialogueBufferMemory():
     """A memory module that provides dialogue history as context for subsequent LLM operations."""
 
-    def __init__(self, path: Path, max_context_size: int = 20):
+    def __init__(self, path: Path, max_context_size: int = -1):
         self.path = path
         self.max_context_size = max_context_size
         self.session = None
