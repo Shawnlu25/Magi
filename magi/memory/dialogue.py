@@ -65,7 +65,7 @@ class DialogueBufferMemory():
             f.write(self.session.to_json())
     
     def get_context(self):
-        return self.session.read_from_tail(self.max_context_size)
+        return self.session.read_from_tail()
     
     def append(self, message: Message):
         self.session.append(message)

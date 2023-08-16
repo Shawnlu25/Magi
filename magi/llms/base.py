@@ -31,3 +31,10 @@ class LlmUsage:
             prompt_tokens=self.prompt_tokens + other.prompt_tokens,
             response_time=self.response_time + other.response_time
         )
+@dataclass
+class StreamedChatCompletion(ABC):
+    reply_message: Message = None
+    usage: LlmUsage = None
+
+    def generate(self):
+        raise NotImplementedError

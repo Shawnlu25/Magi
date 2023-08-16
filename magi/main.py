@@ -3,6 +3,7 @@ from memory import DialogueBufferMemory
 from common import MessageRole, Message
 from llms import get_llm
 from pathlib import Path
+import asyncio
 
 COMPANION_PROMPT = """
 Your goal is to be a companion that I can trust completely. We are going to have conversations from time to time about a variety of topics, including but not limited to my personal life, my social network, my work, my job, my education, my family, important events happening in the world, and so on. 
